@@ -12,41 +12,25 @@ author_image_url: https://avatars.githubusercontent.com/u/3084745?v=4
 We highly encourage you to check out [the Example Apps](example-apps.md) to get a feel of tRPC and getting up & running as seamless as possible.
 :::
 
-## Installation
+:::caution
+tRPC requires TypeScript > 4.1 as it relies on [Template Literal Types](https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html).
+:::
 
-**⚠️ Requirements**: tRPC requires TypeScript > 4.1 as it relies on [Template Literal Types](https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html).
-
-`npm install @trpc/server`
-
-For implementing tRPC endpoints and routers. Install in your server codebase.
-
-`npm install @trpc/client`
-
-For making typesafe API calls from your client. Install in your client codebase.
-
-`npm install @trpc/react`
-
-For generating a powerful set of React hooks for querying your tRPC API. Powered by [react-query](https://react-query.tanstack.com/).
-
-`npm install @trpc/next`
-
-A set of utilies for integrating tRPC with [Next.js](https://nextjs.org/).
-
-### Installation Snippets
+## Install Dependencies
 
 **npm:**
 
 ```bash
-npm install @trpc/server @trpc/client @trpc/react @trpc/next
+npm install @trpc/server
 ```
 
 **yarn:**
 
 ```bash
-yarn add @trpc/server @trpc/client @trpc/react @trpc/next
+yarn add @trpc/server
 ```
 
-## Defining a router
+## Define a Router
 
 Let's walk through the steps of building a typesafe API with tRPC. To start, this API will only contain two endpoints:
 
@@ -55,33 +39,29 @@ getUser(id: string) => { id: string; name: string; }
 createUser(data: {name:string}) => { id: string; name: string; }
 ```
 
-### Create a router instance
+### Create a Router Instance
 
 First we define a router somewhere in our server codebase:
 
 ```ts
-// server/index.ts
 import * as trpc from '@trpc/server';
 const appRouter = trpc.router();
 
-// only export *type signature* of router!
+// only export *type signature* of the router!
 // to avoid accidentally importing your API
 // into client-side code
 export type AppRouter = typeof appRouter;
 ```
 
-### Add a query endpoint
+### Add a Query Endpoint
 
-Use the `.query()` method to add a query endpoint to the router. Arguments:
+Use the `query(name: string, params: QueryParams)` method to add a query endpoint to the router. Arguments:
 
-`.query(name: string, params: QueryParams)`
-
-- `name: string`: The name of this endpoint
+- `name`: The name of this endpoint
 - `params.input`: Optional. This should be a function that validates/casts the _input_ of this endpoint and either returns a strongly typed value (if valid) or throws an error (if invalid). Alternatively you can pass a [Zod](https://github.com/colinhacks/zod), [Superstruct](https://github.com/ianstormtaylor/superstruct) or [Yup](https://github.com/jquense/yup) schema.
 - `params.resolve`: This is the actual implementation of the endpoint. It's a function with a single `req` argument. The validated input is passed into `req.input` and the context is in `req.ctx` (more about context later!)
 
 ```ts
-// server/index.ts
 import * as trpc from '@trpc/server';
 
 const appRouter = trpc.router().query('getUser', {
@@ -90,7 +70,7 @@ const appRouter = trpc.router().query('getUser', {
     throw new Error(`Invalid input: ${typeof val}`);
   },
   async resolve(req) {
-    req.input; // string
+    req.input;
     return { id: req.input, name: 'Bilbo' };
   },
 });
@@ -98,16 +78,11 @@ const appRouter = trpc.router().query('getUser', {
 export type AppRouter = typeof appRouter;
 ```
 
-### Add a mutation endpoint
+### Add a Mutation Endpoint
 
-Similarly to GraphQL, tRPC makes a distinction between query and mutation endpoints. Let's add a `createUser` mutation:
-
-```ts
-createUser(payload: {name: string}) => {id: string; name: string};
-```
+Similar to GraphQL, tRPC makes a distinction between query and mutation endpoints. Let's add a `createUser` mutation:
 
 ```ts
-// server/index.ts
 import * as trpc from '@trpc/server';
 import { z } from 'zod';
 
@@ -119,7 +94,7 @@ const appRouter = trpc
       throw new Error(`Invalid input: ${typeof val}`);
     },
     async resolve(req) {
-      req.input; // string
+      req.input;
       return { id: req.input, name: 'Bilbo' };
     },
   })
@@ -137,10 +112,16 @@ const appRouter = trpc
 export type AppRouter = typeof appRouter;
 ```
 
+## Use the Power of Express/Fastify
+
+If you already have an Express.js or Fastify.js server, you can use the corresponding adapters to convert a tRPC router to an express middleware or a fastify plugin.
+
+- [Express.js Adapter](/docs/express)
+- [Fastify.js Adapter](/docs/fastify)
+
 ## Next steps
 
 tRPC includes more sophisticated client-side tooling designed for React projects generally and Next.js specifically. Read the appropriate guide next:
 
 - [Usage with Next.js](/docs/nextjs)
-- [Usage with Express.js (server-side)](/docs/express)
-- [Usage with React (client-side)](/docs/react)
+- [Usage with React.js](/docs/react)
