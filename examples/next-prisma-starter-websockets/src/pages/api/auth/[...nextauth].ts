@@ -36,14 +36,6 @@ if (useMockProvider) {
     GithubProvider({
       clientId: GITHUB_CLIENT_ID,
       clientSecret: GITHUB_SECRET,
-      profile(profile) {
-        return {
-          id: profile.id,
-          name: profile.login,
-          email: profile.email,
-          image: profile.avatar_url,
-        } as any;
-      },
     }),
   );
 }
