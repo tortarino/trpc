@@ -238,21 +238,16 @@ export function createReactQueryHooks<
       TError
     >,
   ): UseQueryResult<TQueryValues[TPath]['output'], TError> {
-    const { client, isPrepass, queryClient, prefetchQuery } = useContext();
+    const { client, isPrepass } = useContext();
 
-    if (
-      typeof window === 'undefined' &&
-      isPrepass &&
-      opts?.ssr !== false &&
-      opts?.enabled !== false &&
-      !queryClient.getQueryCache().find(pathAndInput)
-    ) {
-      prefetchQuery(pathAndInput as any, opts as any);
-    }
+    const actualOpts = {
+      suspense: isPrepass && opts?.ssr !== false && opts?.enabled !== false,
+      ...opts,
+    };
     return __useQuery(
       pathAndInput as any,
-      () => (client as any).query(...getClientArgs(pathAndInput, opts)),
-      opts,
+      () => (client as any).query(...getClientArgs(pathAndInput, actualOpts)),
+      actualOpts,
     );
   }
 
@@ -339,28 +334,22 @@ export function createReactQueryHooks<
     >,
   ): UseInfiniteQueryResult<TQueryValues[TPath]['output'], TError> {
     const [path, input] = pathAndInput;
-    const { client, isPrepass, prefetchInfiniteQuery, queryClient } =
-      useContext();
+    const { client, isPrepass } = useContext();
 
-    if (
-      typeof window === 'undefined' &&
-      isPrepass &&
-      opts?.ssr !== false &&
-      opts?.enabled !== false &&
-      !queryClient.getQueryCache().find(pathAndInput)
-    ) {
-      prefetchInfiniteQuery(pathAndInput as any, opts as any);
-    }
+    const actualOpts = {
+      suspense: isPrepass && opts?.ssr !== false && opts?.enabled !== false,
+      ...opts,
+    };
 
     return __useInfiniteQuery(
       pathAndInput as any,
       ({ pageParam }) => {
         const actualInput = { ...((input as any) ?? {}), cursor: pageParam };
         return (client as any).query(
-          ...getClientArgs([path, actualInput], opts),
+          ...getClientArgs([path, actualInput], actualOpts),
         );
       },
-      opts,
+      actualOpts,
     );
   }
   function useDehydratedState(

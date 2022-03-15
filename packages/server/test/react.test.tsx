@@ -1620,10 +1620,22 @@ describe('withTRPC()', () => {
     // @ts-ignore
     delete global.window;
     const { trpc, trpcClientOptions, createContext } = factory;
+    function PostById(props: { id: string }) {
+      const query = trpc.useQuery(['postById', props.id]);
+
+      return (
+        <>
+          {props.id}:{JSON.stringify(query.data ?? null)}
+        </>
+      );
+    }
     const App: AppType = () => {
-      const query1 = trpc.useQuery(['postById', '1']);
-      const query2 = trpc.useQuery(['postById', '2']);
-      return <>{JSON.stringify([query1.data, query2.data])}</>;
+      return (
+        <>
+          <PostById id="1" />
+          <PostById id="2" />
+        </>
+      );
     };
 
     const Wrapped = withTRPC({
@@ -1682,10 +1694,6 @@ describe('withTRPC()', () => {
         global.window = window;
 
         const utils = render(<Wrapped {...props} />);
-
-        // when queryKey does not change query2 only fetched in the browser
-        expect(utils.container).toHaveTextContent('first post');
-        expect(utils.container).not.toHaveTextContent('second post');
 
         await waitFor(() => {
           expect(utils.container).toHaveTextContent('first post');
@@ -1771,8 +1779,8 @@ describe('withTRPC()', () => {
           );
           return (
             <>
-              <>{JSON.stringify(query1.data)}</>
-              <>{JSON.stringify(query2.data)}</>
+              <>query1:{JSON.stringify(query1.data)}</>
+              <>query2:{JSON.stringify(query2.data)}</>
             </>
           );
         };
@@ -1790,10 +1798,6 @@ describe('withTRPC()', () => {
         global.window = window;
 
         const utils = render(<Wrapped {...props} />);
-
-        // when queryKey does not change query2 only fetched in the browser
-        expect(utils.container).toHaveTextContent('first post');
-        expect(utils.container).not.toHaveTextContent('second post');
 
         await waitFor(() => {
           expect(utils.container).toHaveTextContent('first post');
