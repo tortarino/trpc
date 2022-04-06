@@ -1,0 +1,4 @@
+{
+  "main": "dist/trpc-openapi-generator.cjs.js",
+  "module": "dist/trpc-openapi-generator.esm.js"
+}

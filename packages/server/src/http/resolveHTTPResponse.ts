@@ -19,7 +19,7 @@ import {
   HTTPResponse,
 } from './internals/types';
 
-const HTTP_METHOD_PROCEDURE_TYPE_MAP: Record<
+export const HTTP_METHOD_PROCEDURE_TYPE_MAP: Record<
   string,
   ProcedureType | undefined
 > = {

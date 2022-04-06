@@ -23,7 +23,9 @@ const JSONRPC2_TO_HTTP_CODE: Record<
   METHOD_NOT_SUPPORTED: 405,
 };
 
-function getStatusCodeFromKey(code: keyof typeof TRPC_ERROR_CODES_BY_KEY) {
+export function getStatusCodeFromKey(
+  code: keyof typeof TRPC_ERROR_CODES_BY_KEY,
+) {
   return JSONRPC2_TO_HTTP_CODE[code] ?? 500;
 }
 
