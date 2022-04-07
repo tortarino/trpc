@@ -1,5 +1,3 @@
-import type { DefaultErrorShape } from '@trpc/server';
-
 import type {
   NodeHTTPHandlerOptions,
   NodeHTTPRequest,
@@ -8,10 +6,6 @@ import type {
 import type { OpenApiCompliantRouter } from '../../types';
 
 export type { NodeHTTPRequest, NodeHTTPResponse };
-
-export type OpenApiResponse =
-  | { ok: true; data: any }
-  | { ok: false; error: DefaultErrorShape };
 
 // Request batching is not currently supported by tRPC OpenAPI handlers.
 export type CreateOpenApiHandlerOptions<

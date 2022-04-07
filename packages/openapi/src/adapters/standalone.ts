@@ -1,9 +1,8 @@
-import url from 'url';
 import * as http from 'http';
-
+import url from 'url';
+import type { OpenApiCompliantRouter } from '../types';
 import { nodeHTTPOpenApiRequestHandler } from './node-http';
 import type { CreateOpenApiHandlerOptions } from './node-http';
-import type { OpenApiCompliantRouter } from '../types';
 
 export const createHTTPOpenApiHandler = <
   TRouter extends OpenApiCompliantRouter,

@@ -38,5 +38,6 @@ export type OpenApiCompliantRouter<
   'subscription'
 >;
 
-type undef = undefined extends any ? 'true' : 'false';
-type unkno = undefined extends any ? 'true' : 'false';
+export type OpenApiResponse =
+  | { ok: true; data: any }
+  | { ok: false; error: DefaultErrorShape };

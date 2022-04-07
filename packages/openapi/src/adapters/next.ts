@@ -1,9 +1,8 @@
 import { TRPCError } from '@trpc/server';
 import type * as next from 'next';
-
+import type { OpenApiCompliantRouter } from '../types';
 import { nodeHTTPOpenApiRequestHandler } from './node-http';
 import type { CreateOpenApiHandlerOptions } from './node-http';
-import type { OpenApiCompliantRouter } from '../types';
 
 export const createNextOpenApiHandler = <
   TRouter extends OpenApiCompliantRouter,

@@ -8,23 +8,29 @@ const zodToOpenApiSchema = (zod: z.ZodType): OpenAPIV3.SchemaObject => {
   return zodToJsonSchema(zod, { target: 'openApi3' });
 };
 
-export const getRequestQueryParametersSchema = (parser: any): [OpenAPIV3.ParameterObject] | undefined => {
+export const getRequestQueryParametersSchema = (
+  parser: any,
+): [OpenAPIV3.ParameterObject] | undefined => {
   const zod = parserToZod(parser);
   if (!zod) {
     return undefined;
   }
-  return [{
-    description: zod.description || undefined,
-    name: 'input',
-    in: 'query',
-    required: !zod.isOptional(),
-    schema: zodToOpenApiSchema(zod),
-    style: 'form',
-    explode: true,
-  }];
+  return [
+    {
+      description: zod.description || undefined,
+      name: 'input',
+      in: 'query',
+      required: !zod.isOptional(),
+      schema: zodToOpenApiSchema(zod),
+      style: 'form',
+      explode: true,
+    },
+  ];
 };
 
-export const getRequestBodySchema = (parser: any): OpenAPIV3.RequestBodyObject | undefined => {
+export const getRequestBodySchema = (
+  parser: any,
+): OpenAPIV3.RequestBodyObject | undefined => {
   const zod = parserToZod(parser);
   if (!zod) {
     return undefined;
@@ -40,7 +46,9 @@ export const getRequestBodySchema = (parser: any): OpenAPIV3.RequestBodyObject |
   };
 };
 
-export const getReponseBodySchema = (parser: any): OpenAPIV3.ResponsesObject => {
+export const getReponseBodySchema = (
+  parser: any,
+): OpenAPIV3.ResponsesObject => {
   let zod = parserToZod(parser);
   if (!zod) {
     zod = z.null({ description: 'Successful response data is unknown' });
@@ -50,10 +58,12 @@ export const getReponseBodySchema = (parser: any): OpenAPIV3.ResponsesObject => 
       description: zod.description || 'Successful response',
       content: {
         'application/json': {
-          schema: zodToOpenApiSchema(z.object({
-            ok: z.literal(true),
-            data: zod,
-          })),
+          schema: zodToOpenApiSchema(
+            z.object({
+              ok: z.literal(true),
+              data: zod,
+            }),
+          ),
         },
       },
     },

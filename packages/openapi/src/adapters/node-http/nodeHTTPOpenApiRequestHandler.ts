@@ -1,32 +1,17 @@
-// /* eslint-disable @typescript-eslint/no-non-null-assertion */
-// import { URLSearchParams } from 'url';
-// import { assertNotBrowser } from '../../assertNotBrowser';
-// import { HTTPRequest } from '../../http/internals/types';
-// import { resolveHTTPResponse } from '../../http/resolveHTTPResponse';
-// import { AnyRouter, inferRouterContext } from '../../router';
-// import { getPostBody } from './internals/getPostBody';
-// import {
-//   NodeHTTPHandlerOptions,
-//   NodeHTTPRequest,
-//   NodeHTTPResponse,
-// } from './types';
-
 import {
-  assertNotBrowser,
-  TRPCError,
   HTTP_METHOD_PROCEDURE_TYPE_MAP,
-  getStatusCodeFromKey,
+  TRPCError,
+  assertNotBrowser,
   getErrorFromUnknown,
+  getStatusCodeFromKey,
 } from '@trpc/server';
 import type { ResponseMeta } from '@trpc/server';
-
+import type { OpenApiCompliantRouter, OpenApiResponse } from '../../types';
 import type {
-  OpenApiResponse,
   CreateOpenApiHandlerOptions,
   NodeHTTPRequest,
   NodeHTTPResponse,
 } from './types';
-import type { OpenApiCompliantRouter } from '../../types';
 
 assertNotBrowser();
 

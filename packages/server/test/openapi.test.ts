@@ -3,7 +3,7 @@ import { expectTypeOf } from 'expect-type';
 import { z } from 'zod';
 import * as trpcOpenApi from '../../openapi/src';
 import * as trpc from '../src';
-import { TRPCRouter, inferProcedureInput, inferProcedureOutput } from '../src';
+import { inferProcedureInput, inferProcedureOutput } from '../src';
 
 test('router', () => {
   const openApiRouter = trpcOpenApi.router();

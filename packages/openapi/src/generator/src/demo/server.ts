@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import * as trpc from '@trpc/server';
 import http from 'http';
 import { router } from './router';

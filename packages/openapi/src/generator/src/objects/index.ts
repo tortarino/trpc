@@ -1,13 +1,23 @@
 import { Procedure } from '@trpc/server/dist/declarations/src/internals/procedure';
 import type { OpenAPIV3 } from 'openapi-types';
-import { getReponseBodySchema, getRequestBodySchema, getRequestQueryParametersSchema } from './schemas';
-import type { TRPCRouter, TRPCProcedure } from './types';
+import {
+  getReponseBodySchema,
+  getRequestBodySchema,
+  getRequestQueryParametersSchema,
+} from './schemas';
+import type { TRPCProcedure, TRPCRouter } from './types';
 
 export const getOpenApiVersion = () => '3.0.0' as const;
 
-export const getInfoObject = (title: string, version: string, description?: string): OpenAPIV3.InfoObject => ({ title, version, description });
+export const getInfoObject = (
+  title: string,
+  version: string,
+  description?: string,
+): OpenAPIV3.InfoObject => ({ title, version, description });
 
-export const getServersObject = (baseUrl: string): OpenAPIV3.ServerObject[] => ([{ url: baseUrl }]);
+export const getServersObject = (baseUrl: string): OpenAPIV3.ServerObject[] => [
+  { url: baseUrl },
+];
 
 export const getPathsObject = (router: TRPCRouter): OpenAPIV3.PathsObject => {
   const getTags = (path: string): string[] => {
@@ -59,6 +69,9 @@ export const getPathsObject = (router: TRPCRouter): OpenAPIV3.PathsObject => {
 
 export const getComponentsObject = (): OpenAPIV3.ComponentsObject => ({});
 
-export const getSecurityObject = (): OpenAPIV3.SecurityRequirementObject[] => ([]);
+export const getSecurityObject =
+  (): OpenAPIV3.SecurityRequirementObject[] => [];
 
-export const getExternalDocsObject = (url: string): OpenAPIV3.ExternalDocumentationObject => ({ url });
+export const getExternalDocsObject = (
+  url: string,
+): OpenAPIV3.ExternalDocumentationObject => ({ url });

@@ -1,10 +1,9 @@
 import type * as express from 'express';
-
+import type { OpenApiCompliantRouter } from '../types';
 import { nodeHTTPOpenApiRequestHandler } from './node-http';
 import type { CreateOpenApiHandlerOptions } from './node-http';
-import type { OpenApiCompliantRouter } from '../types';
 
-export const createExpressOpenApiHandler = <
+export const createExpressOpenApiMiddleware = <
   TRouter extends OpenApiCompliantRouter,
 >(
   opts: CreateOpenApiHandlerOptions<TRouter, express.Request, express.Response>,
