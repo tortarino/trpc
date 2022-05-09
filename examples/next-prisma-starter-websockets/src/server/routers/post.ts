@@ -137,6 +137,11 @@ export const postRouter = createRouter()
       });
     },
   })
+  .query('whoIsTypingQuery', {
+    resolve() {
+      return Object.keys(currentlyTyping);
+    },
+  })
   .subscription('whoIsTyping', {
     resolve() {
       let prev: string[] | null = null;

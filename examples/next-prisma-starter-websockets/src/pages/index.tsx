@@ -4,6 +4,26 @@ import Head from 'next/head';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
+function useWhoIsTyping() {
+  const query = trpc.useQuery(['post.whoIsTypingQuery']);
+
+  const [whoIsTyping, setWhoIsTyping] = useState<string[]>(query.data || []);
+  useEffect(() => {
+    // when query data updates, update whoIsTyping
+    if (query.data) {
+      setWhoIsTyping(query.data);
+    }
+  }, [query.data]);
+
+  trpc.useSubscription(['post.whoIsTyping'], {
+    onNext(data) {
+      setWhoIsTyping(data);
+    },
+  });
+
+  return whoIsTyping;
+}
+
 function AddMessageForm({ onMessagePost }: { onMessagePost: () => void }) {
   const addPost = trpc.useMutation('post.add');
   const utils = trpc.useContext();
@@ -172,13 +192,7 @@ export default function IndexPage() {
     },
   });
 
-  const [currentlyTyping, setCurrentlyTyping] = useState<string[]>([]);
-  trpc.useSubscription(['post.whoIsTyping'], {
-    onNext(data) {
-      setCurrentlyTyping(data);
-    },
-  });
-
+  const currentlyTyping = useWhoIsTyping();
   return (
     <>
       <Head>
