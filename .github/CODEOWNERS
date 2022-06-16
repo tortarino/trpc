@@ -2,8 +2,8 @@
 
 * @KATT
 
-**/package.json @trpc-bot
-**/yarn.lock @trpc-bot
+**/package.json @trpc-bot, KATT
+**/yarn.lock @trpc-bot, KATT
 
 
 **/*fastify* @skarab42
