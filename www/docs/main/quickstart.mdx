@@ -60,8 +60,12 @@ createUser(data: {name:string}) => { id: string; name: string; }
 First we define a router somewhere in our server codebase:
 
 ```ts title='server.ts'
-import * as trpc from '@trpc/server';
-const appRouter = trpc.router();
+import { initTRPC } from '@trpc/server';
+
+// Important to have double `()()`
+const t = initTRPC()();
+
+const appRouter = t.router({});
 
 // only export *type signature* of router!
 // to avoid accidentally importing your API
@@ -80,18 +84,21 @@ Use the `.query()` method to add a query endpoint to the router. Arguments:
 - `params.resolve`: This is the actual implementation of the endpoint. It's a function with a single `req` argument. The validated input is passed into `req.input` and the context is in `req.ctx` (more about context later!)
 
 ```ts title='server.ts'
+import { initTRPC } from '@trpc/server';
 
-import * as trpc from '@trpc/server';
+// Important to have double `()()`
+const t = initTRPC()();
 
-const appRouter = trpc.router().query('getUser', {
-  input: (val: unknown) => {
-    if (typeof val === 'string') return val;
-    throw new Error(`Invalid input: ${typeof val}`);
-  },
-  async resolve(req) {
-    req.input; // string
-    return { id: req.input, name: 'Bilbo' };
-  },
+const appRouter = t.router({
+  getUser: t.procedure
+    .input((val: unknown) => {
+      if (typeof val === 'string') return val;
+      throw new Error(`Invalid input: ${typeof val}`);
+    })
+    .query((opts) => {
+      opts.input; // string
+      return { id: opts.input, name: 'Bilbo' };
+    }),
 });
 
 export type AppRouter = typeof appRouter;
